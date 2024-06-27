@@ -113,7 +113,7 @@ BUILD SUCCESSFUL in 1s
 
 ## Demo主函数代码
 
-Code:  [code\S1-Use-Spring-Initializr](../code\S1-Use-Spring-Initializr)
+Code:  [code\S1-Use-Spring-Initializr](../code/S1-Use-Spring-Initializr)
 
 
 ```java
