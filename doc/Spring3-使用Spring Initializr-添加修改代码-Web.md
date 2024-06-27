@@ -131,6 +131,16 @@ tasks.named('test') {
 
 如果上述代码无法运行，则直接点击IDEA的运行按钮运行。
 
+或者直接配置IDEA所用的JDK版本为：JDK17+
+
+## 配置IDEA的默认JDK版本
+
+![1719466981062](images/Spring3-使用SpringInitializr-添加修改代码-Web/1719466981062.png)
+
+
+![1719467019517](images/Spring3-使用SpringInitializr-添加修改代码-Web/1719467019517.png)
+
+
 ## 运行结果
 
 ![1719455298361](images/Spring3-使用SpringInitializr-添加修改代码/1719455298361.png)
@@ -190,6 +200,10 @@ http://localhost:8080/hello?name=Jinwei
 即可获得页面返回：
 
 ![1719455771157](images/Spring3-使用SpringInitializr-添加修改代码/1719455771157.png)
+
+## 稳定运行
+
+![1719460541894](images/Spring3-使用SpringInitializr-添加修改代码-Web/1719460541894.png)
 
 ## MacOS/Linux 测试
 
