@@ -113,6 +113,9 @@ BUILD SUCCESSFUL in 1s
 
 ## Demo主函数代码
 
+Code:  [code\S1-Use-Spring-Initializr](../code\S1-Use-Spring-Initializr)
+
+
 ```java
 
 package com.example.demo;
@@ -139,7 +142,6 @@ SpringApplication.run(DemoApplication.class, args);
 ```
 
 通过上述函数启动整个Spring Demo项目。
-
 
 ## build.gradle 文件自动-详细配置信息分析
 
