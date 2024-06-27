@@ -114,6 +114,7 @@ BUILD SUCCESSFUL in 1s
 ## Demo主函数代码
 
 ```java
+
 package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
@@ -128,3 +129,73 @@ public class DemoApplication {
 
 }
 ```
+
+---
+
+## 启动关键函数
+
+```java
+SpringApplication.run(DemoApplication.class, args);
+```
+
+通过上述函数启动整个Spring Demo项目。
+
+
+## build.gradle 文件自动-详细配置信息分析
+
+```java
+// 引入的插件
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.1'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+// 项目组织名
+group = 'com.example'
+// 项目的版本
+version = '0.0.1-SNAPSHOT'
+
+// Java工具配置，比如JDK
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+// 设置获取依赖的仓库，远程或者本地
+repositories {
+	mavenCentral()  // 从远程Mavan中心仓库获取
+}
+
+// 设置项目的依赖
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// 任务的其他配置
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+```
+
+可见主要依赖为：
+
+```java
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+```
+
+获取依赖信息可以从网站：[Maven Repository: Search/Browse/Explore (mvnrepository.com)](https://mvnrepository.com/)中查询获取。
+
+![1719451528028](images/Spring2-Spring快速上手-使用SpringInitializr/1719451528028.png)
+
+![1719451570132](images/Spring2-Spring快速上手-使用SpringInitializr/1719451570132.png)
+
+![1719451620761](images/Spring2-Spring快速上手-使用SpringInitializr/1719451620761.png)
