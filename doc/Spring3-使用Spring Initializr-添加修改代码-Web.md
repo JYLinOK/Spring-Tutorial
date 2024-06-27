@@ -6,7 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [code/S2-Use-Spring-Initializr-add](code/S2-Use-Spring-Initializr-add)
+Code: [../code/S2-Use-Spring-Initializr-add](../code/S2-Use-Spring-Initializr-add)
 
 ## 首先新建一个Spring Test项目
 
