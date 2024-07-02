@@ -23,4 +23,21 @@ lin-jinwei
 
 ## 
 
-=> windows 安装gradle只是
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1
