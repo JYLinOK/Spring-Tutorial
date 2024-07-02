@@ -18,14 +18,14 @@
 
 ### Doc
 
-##### [Spring1-Spring原理入门](doc/Spring1-Spring原理入门.md)
+##### [Spring1-Spring原理入门](handsonDoc/Spring1-Spring原理入门.md)
 
-##### [Spring2-Spring快速上手-使用Spring Initializr](doc/Spring2-Spring快速上手-使用Spring%20Initializr.md)
+##### [Spring2-Spring快速上手-使用Spring Initializr](handsonDocdoc/Spring2-Spring快速上手-使用Spring%20Initializr.md)
 
-##### [Spring3-使用Spring Initializr-添加修改代码-Web](doc/Spring3-使用Spring%20Initializr-添加修改代码-Web.md)
+##### [Spring3-使用Spring Initializr-添加修改代码-Web](handsonDocdoc/Spring3-使用Spring%20Initializr-添加修改代码-Web.md)
 
-##### [Spring4-构建基础的RESTful项目](doc/Spring4-构建基础的RESTful项目.md)
+##### [Spring4-构建基础的RESTful项目](handsonDocdoc/Spring4-构建基础的RESTful项目.md)
 
-##### [Spring5-构建web RESTful项目](doc/Spring5-构建web%20RESTful项目.md)
+##### [Spring5-构建web RESTful项目](handsonDocdoc/Spring5-构建web%20RESTful项目.md)
 
 continue...
