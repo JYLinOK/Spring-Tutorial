@@ -1,4 +1,4 @@
-# Gradle 安装问题 debug 汇总
+# Gradle 安装
 
 lin-jinwei
 
@@ -25,7 +25,6 @@ lin-jinwei
 ### 下载->解压->设置环境变量
 
 #### 环境变量：
-
 
 ![1719890925039](images/D001-Gradle安装/1719890925039.png)
 
