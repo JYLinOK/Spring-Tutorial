@@ -1,6 +1,6 @@
-# DockerSpringLinux003-Docker配置镜像源与加速
+# Docker003-Docker配置镜像源与加速
 
-lin-jinwei
+lin-jinwei, FaQianApp
 
 注意，未授权不得擅自以盈利方式转载本博客任何文章。
 

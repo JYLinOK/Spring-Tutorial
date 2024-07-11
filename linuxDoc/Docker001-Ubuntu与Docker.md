@@ -1,6 +1,6 @@
-# SpringLinux001-Ubuntu与Docker
+# Spring001-Ubuntu与Docker
 
-lin-jinwei
+lin-jinwei, FaQianApp
 
 注意，未授权不得擅自以盈利方式转载本博客任何文章。
 
