@@ -208,4 +208,139 @@ docker pull ubuntu:24.04
 [DockerSpringLinux003-Docker配置镜像源与加速.md](./DockerSpringLinux003-Docker配置镜像源与加速.md)
 
 
+## 配置加速后继续拉取
+```docker
+docker pull ubuntu:24.04
+```
+或者直接省略版本号进行拉镜像：
+![alt text](image-13.png)
+
+实际操作中可能会出现加了版本后无法拉镜像的问题，推测是镜像库没有该版本镜像。
+
+## 拉取的镜像保存在哪里
+
+拉取的镜像一般保存在Docker默认的镜像目录，而不是当前的工作目录：
+![alt text](image-14.png)
+
+
+## 通过的 docker run 命令启动镜像
+
+使用命令：
+```docker
+docker run -it ubuntu /bin/bash
+```
+
+参数解释：
+-it: = -i （交互操作）+ -t（终端操作）
+ubuntu： 镜像类别
+/bin/bash： 使用的交互终端
+
+
+![alt text](image-15.png)
+
+添加sudo，启动镜像成功：
+
+![alt text](image-16.png)
+
+root@  一直到 :\/# 为该容器的字符串ID.
+
+输入版本输出命令，测试新运行的ubuntu容器的系统版本以及docker版本：
+
+![alt text](image-17.png)
+
+使用各种命令获取容器的系统版本：
+```docker
+root@8b2721c88498:/# hostnamectl
+bash: hostnamectl: command not found
+root@8b2721c88498:/# cat /etc/issue
+Ubuntu 20.04.3 LTS \n \l
+
+root@8b2721c88498:/# cat /etc/os-release
+NAME="Ubuntu"
+VERSION="20.04.3 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.3 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+root@8b2721c88498:/# cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.3 LTS"
+root@8b2721c88498:/# lsb_release -crid
+bash: lsb_release: command not found
+root@8b2721c88498:/# 
+```
+
+可见，支持的最新版的Ubuntu系统为:Ubuntu 20.04.3 LTS.
+
+可见，容器不是真正完整的系统，但应该具有基本系统的功能，也不安装Docker.
+
+容器的根目录：
+![alt text](image-19.png)
+
+## 查看当前所有容器的运行状态
+使用命令：
+```docker
+docker ps -a
+```
+![alt text](image-18.png)
+
+## 退出容器
+命令：
+```docker
+exit
+```
+
+![alt text](image-20.png)
+
+查看当前所有容器的运行状态
+使用命令：
+```docker
+docker ps -a
+```
+![alt text](image-21.png)
+
+## 运行后台容器
+
+命令：
+```docker
+docker run -itd --name [容器自定义名称ID] ubuntu /bin/bash
+```
+
+实测命令：
+```docker
+docker run -itd --name ubuntu-d ubuntu /bin/bash
+```
+
+![alt text](image-22.png)
+
+上述命令启动 ubuntu-d 后没有继续进入 terminal，但是可以检索到，说明该容器在后台运行。
+
+
+## 停止后台运行容器
+
+命令：
+```docker
+docker stop [容器字符串ID]
+```
+
+比如停止上面的后台镜像：
+1. 先通过命令：sudo docker ps -a 获取所有容器信息；
+2. 然后通过上述命令停止对应的容器。
+
+实测命令：
+```docker
+docker stop [容器字符串ID]
+```
+
+![alt text](image-23.png)
+
+
 
