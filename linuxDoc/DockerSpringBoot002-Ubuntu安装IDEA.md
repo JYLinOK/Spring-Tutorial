@@ -1,4 +1,4 @@
-# DockerSpringLinux003-Docker配置镜像源与加速
+# DockerSpringBoot002-Ubuntu安装IDEA
 
 lin-jinwei, FaQianApp
 
