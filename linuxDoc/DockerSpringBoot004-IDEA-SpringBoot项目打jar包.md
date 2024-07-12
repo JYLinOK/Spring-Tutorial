@@ -46,3 +46,10 @@ jar {
 }
 
 ```
+
+---
+
+## 问题分析
+如果添加了manifest还是提示错误，则直接重新创建一个 Springboot Initializr 项目，并采用下列教程方法测试。
+
+[DockerSpringBoot005-IDEA-SpringBoot项目打jar包-gradle.md]
