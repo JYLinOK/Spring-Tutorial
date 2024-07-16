@@ -34,16 +34,16 @@
 
 ### Ubuntu
 ### linuxDoc
-##### [Docker001-Ubuntu与Docker](linuxDoc/Docker001-Ubuntu与Docker.md)
-##### [Docker002-Docker新建与管理容器](linuxDoc/Docker002-Docker新建与管理容器.md)
-##### [Docker003-Docker配置镜像源与加速](linuxDoc/Docker003-Docker配置镜像源与加速.md)
-##### [DockerSpringBoot001-镜像环境配置](linuxDoc/DockerSpringBoot001-镜像环境配置.md)
-##### [DockerSpringBoot002-Ubuntu安装IDEA](linuxDoc/DockerSpringBoot002-Ubuntu安装IDEA.md)
-##### [DockerSpringBoot003-Ubuntu使用SpringInitializr](linuxDoc/DockerSpringBoot003-Ubuntu使用SpringInitializr.md)
-##### [DockerSpringBoot004-IDEA-SpringBoot项目打jar包](linuxDoc/DockerSpringBoot004-IDEA-SpringBoot项目打jar包.md)
-##### [DockerSpringBoot005-IDEA-SpringBoot项目打jar包-gradle](linuxDoc/DockerSpringBoot005-IDEA-SpringBoot项目打jar包-gradle.md)
+##### [Docker002-Docker新建与管理容器](/home/jy/CODE/Spring-Tutorial/linuxDoc/Docker002-Docker新建与管理容器.md)
+##### [DockerSpringBoot002-Ubuntu安装IDEA](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot002-Ubuntu安装IDEA.md)
+##### [DockerSpringBoot003-Ubuntu使用SpringInitializr](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot003-Ubuntu使用SpringInitializr.md)
+##### [DockerSpringBoot005-IDEA-SpringBoot项目打jar包-gradle](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot005-IDEA-SpringBoot项目打jar包-gradle.md)
+##### [Docker001-Ubuntu与Docker](/home/jy/CODE/Spring-Tutorial/linuxDoc/Docker001-Ubuntu与Docker.md)
+##### [DockerSpringBoot004-IDEA-SpringBoot项目打jar包](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot004-IDEA-SpringBoot项目打jar包.md)
+##### [DockerSpringBoot001-镜像环境配置](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot001-镜像环境配置.md)
+##### [Docker003-Docker配置镜像源与加速](/home/jy/CODE/Spring-Tutorial/linuxDoc/Docker003-Docker配置镜像源与加速.md)
+##### [DockerSpringBoot006-IDEA-SpringBoot-Web项目打jar包-gradle](/home/jy/CODE/Spring-Tutorial/linuxDoc/DockerSpringBoot006-IDEA-SpringBoot-Web项目打jar包-gradle.md)
 
----
 
 ## Gradle
 
