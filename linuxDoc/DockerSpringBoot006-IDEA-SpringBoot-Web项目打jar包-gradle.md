@@ -57,6 +57,13 @@ Web应用打开,端口号为：8080
 添加代码
 ![alt text](image-96.png)
 
+```java
+package com.jinwei.jinwei_web1;
+
+
+public record Greet1(String message, long id, String content) { }
+```
+
 ## 创建请求控制类
 
 类名：Greet1Controller
@@ -67,6 +74,52 @@ Web应用打开,端口号为：8080
 添加代码：
 ![alt text](image-99.png)
 
+```java
+package com.jinwei.jinwei_web1;
+
+import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class Greet1Controller {
+
+    private static final String template = "Hello, %s!";
+    private final AtomicLong counter = new AtomicLong();
+
+    // 通过@GetMapping定义请求接口API
+    @GetMapping("/greeting")
+    // 通过@RequestParam定义请求需要附带的参数，以及参数的默认值
+    public Greet1 greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+        final String str_message = "Get Return message";
+        // 下面一行定义请求的返回内容
+        return new Greet1(str_message, counter.incrementAndGet(), String.format(template, name));
+    }
+}
+```
+
+## 主文件代码不改动
+文件名：JinweiWeb1Application.java
+具体代码：
+```java
+package com.jinwei.jinwei_web1;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JinweiWeb1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(JinweiWeb1Application.class, args);
+	}
+
+}
+
+```
+
+## 点击按钮运行
 
 成功运行：
 ![alt text](image-100.png)
