@@ -90,6 +90,23 @@ tar -zxvf postman-linux-x64.tar.gz
 
 ![alt text](image-181.png)
 
+测试命令：
+```bash
+http://localhost:8080/getFun1
+```
+结果：
+![alt text](image-193.png)
 
+测试命令：带请求参数的Get请求
+```bash
+http://localhost:8080/getFun1?name=jinwei
+```
+![alt text](image-195.png)
 
+测试成功！
 
+## 测试历史记录
+
+点击Postman左边竖直栏的History,可以查看测试命令记录以及测试命令的使用记录。
+
+![alt text](image-196.png)
