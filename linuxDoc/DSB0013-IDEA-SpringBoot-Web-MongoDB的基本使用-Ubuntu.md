@@ -78,11 +78,44 @@ lines 1-12/12 (END)
 ```
 说明 mongodb已经在运行。
 
+按 Q键退上述窗口。
+
+![alt text](image-253.png)
+
+## 设置 mongodb 开机启动
+
+```bash
+sudo systemctl enable mongod
+```
+
+![alt text](image-254.png)
+
+## 停止 mongodb
+
+```bash
+sudo systemctl stop mongod
+```
+![alt text](image-255.png)
+
+![alt text](image-256.png)
+
+## 重启 mongodb
+
+```bash
+sudo systemctl restart mongod
+```
+![alt text](image-257.png)
+
+![alt text](image-258.png)
 
 
+## 进入 mongdb会话控制
 
+```bash
+mongosh
+```
 
-
+![alt text](image-259.png)
 
 
 
