@@ -1,4 +1,4 @@
-# DSB0014-IDEA-SpringBoot-Web-MongoDB的增删改查-Ubuntu
+# DSB0014-MongoDB的数据库的增删改查-Ubuntu
 lin-jinwei, FaQianApp
 
 注意，未授权不得擅自以盈利方式转载本博客任何文章。
@@ -90,3 +90,11 @@ db.dropDatabase()
 
 删除后重新进入 mongodb可以发现被删除数据库已经不存在：
 ![alt text](image-268.png)
+
+---
+
+
+
+
+
+
