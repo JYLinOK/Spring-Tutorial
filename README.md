@@ -56,6 +56,9 @@
 ##### [DSB0017-MongoDB的数据-集合-删-删除集合-Ubuntu](linuxDoc/DSB0017-MongoDB的数据-集合-删-删除集合-Ubuntu.md)
 ##### [DSB0018-MongoDB的数据-集合-改-更新集合-Ubuntu](linuxDoc/DSB0018-MongoDB的数据-集合-改-更新集合-Ubuntu.md)
 ##### [DSB0019-MongoDB的数据-集合-查-查询集合-Ubuntu](linuxDoc/DSB0019-MongoDB的数据-集合-查-查询集合-Ubuntu.md)
+##### [DSB0020-MongoDB的数据-文档-增-增加新文档-Ubuntu](linuxDoc/DSB0020-MongoDB的数据-文档-增-增加新文档-Ubuntu.md)
+##### [DSB0021-MongoDB的数据-文档-删-删除原文档-Ubuntu](linuxDoc/DSB0021-MongoDB的数据-文档-删-删除原文档-Ubuntu.md)
+<!-- ##### [](linuxDoc/) -->
 <!-- ##### [](linuxDoc/)
 ##### [](linuxDoc/) -->
 
