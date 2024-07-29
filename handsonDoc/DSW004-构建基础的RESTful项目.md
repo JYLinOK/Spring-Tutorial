@@ -1,4 +1,4 @@
-# Spring4-构建基础的 RESTful 项目
+# DSW004-构建基础的 RESTful 项目
 
 lin-jinwei
 
