@@ -6,7 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [../code/l](../code/)
+Code: [../code/../code/S5-dsw-mongodb/](../code/S5-dsw-mongodb/)
 
 ## 使用 SpringBoot Initializr
 
