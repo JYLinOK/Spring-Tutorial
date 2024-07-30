@@ -5,9 +5,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
-@RepositoryRestResource(collectionResourceRel = "people", path = "people")
+@RepositoryRestResource(collectionResourceRel = "cadata", path = "cadata")
 public interface ConnectorRepository extends MongoRepository<Connector, String> {
 
-    List<Connector> findByCacert(@Param("caert") String caert);
+    List<Connector> findByCacert(@Param("cacert") String cacert);
 
 }

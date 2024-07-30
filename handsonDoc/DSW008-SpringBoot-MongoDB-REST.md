@@ -154,23 +154,74 @@ tasks.named('test') {
 }
 ```
 
+## 测试
 
+```bash
+C:\Users\user>curl http://localhost:8080
+{
+  "_links" : {
+    "cadata" : {
+      "href" : "http://localhost:8080/cadata{?page,size,sort*}",
+      "templated" : true
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/profile"
+    }
+  }
+}
 
+C:\Users\user>curl http://localhost:8080/cadata
+{
+  "_embedded" : {
+    "cadata" : [ {
+      "cacert" : "cacert ca0001 class1 0001",
+      "description" : "This is a connector description class1 0001",
+      "sellDataID" : null,
+      "duyDataID" : null,
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/cadata/66a72af725b3ef6972ae18e9"
+        },
+        "connector" : {
+          "href" : "http://localhost:8080/cadata/66a72af725b3ef6972ae18e9"
+        }
+      }
+    }, {
+      "cacert" : "cacert ca0001 class2 0002",
+      "description" : "This is a connector description class1 0002",
+      "sellDataID" : null,
+      "duyDataID" : null,
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/cadata/66a72af725b3ef6972ae18ea"
+        },
+        "connector" : {
+          "href" : "http://localhost:8080/cadata/66a72af725b3ef6972ae18ea"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/cadata?page=0&size=20"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/profile/cadata"
+    },
+    "search" : {
+      "href" : "http://localhost:8080/cadata/search"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 2,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+测试成功~！
 
 
 
