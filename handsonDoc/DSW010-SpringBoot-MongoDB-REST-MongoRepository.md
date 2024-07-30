@@ -8,6 +8,11 @@ lin-jinwei
 
 Code: [../code/S6-dsw-mongodb-rest](../code/S6-dsw-mongodb-rest/)
 
+
+## SpringBoot Initializr 创建项目
+![alt text](image-57.png)
+
+
 ## 引入 gradle依赖
 
 ### lombok官方引入格式-> gradle：https://projectlombok.org/setup/gradle
@@ -32,12 +37,13 @@ dependencies {
 
 ```gradle
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
-    compileOnly 'org.projectlombok:lombok:1.18.34'
+ 	compileOnly 'org.projectlombok:lombok:1.18.34'
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	
 	testCompileOnly 'org.projectlombok:lombok:1.18.34'
@@ -51,6 +57,48 @@ dependencies {
 注意：引入后需要重启，然后可以看到注解 @Data可用
 
 ![alt text](image-56.png)
+
+完成的 gradle文件：
+
+```gradle
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.jinwei'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.34'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+```
 
 ---
 
@@ -96,6 +144,8 @@ public interface ConnectorRepository extends MongoRepository<Connector, String> 
 
 ## 设置 IDEA-MongoDB数据库
 
+在：resources/application.properties：中配置
+
 格式：
 ```bash
 # 直接通过IP:端口号+数据库名称设置
@@ -106,6 +156,33 @@ spring.data.mongodb.uri=mongodb://用户:{密码}@{IP:端口号}/{数据库名�
 
 # 多节点{IP:端口号+数据库名称}设置
 spring.data.mongodb.uri=mongodb://user:pwd@{IP1:端口号1},{IP2:端口号2}/{数据库名称}
+```
+
+可以通过：spring.data.mongodb.uri 属性来进行URL和其他设置的配置，例如配置数据库副本集
+```bash
+spring.data.mongodb.uri=mongodb://user:secret@mongoserver1.example.com:27017,mongoserver2.example.com:23456/test
+```
+
+标准格式：
+```bash
+spring.data.mongodb.host=mongoserver1.example.com
+spring.data.mongodb.port=27017
+spring.data.mongodb.additional-hosts[0]=mongoserver2.example.com:23456
+spring.data.mongodb.database=test
+spring.data.mongodb.username=user
+spring.data.mongodb.password=secret
+```
+
+SSL通信自动化配置：
+```bash
+spring.data.mongodb.uri=mongodb://user:secret@mongoserver1.example.com:27017,mongoserver2.example.com:23456/test
+spring.data.mongodb.ssl.enabled=true
+```
+
+SSL信任资料通信配置
+```bash
+spring.data.mongodb.uri=mongodb://user:secret@mongoserver1.example.com:27017,mongoserver2.example.com:23456/test
+spring.data.mongodb.ssl.bundle=example
 ```
 
 ## application.properties 文件配置
@@ -135,9 +212,30 @@ public class S7DswMongodbRest2Application {
 }
 ```
 
+## 创建基于实体类的服务类：ConnectorService
 
 
 
+## 创建基于实体类的控制类：ConnectorController 
+
+代码：com/jinwei/S7_dsw_mongodb_rest_2/ConnectorController.java
+
+```java
+
+```
+
+## 运行主程序
+
+![alt text](image-59.png)
+
+## Postman测试
+
+code:
+```bash
+http://localhost:8080/api/list
+```
+
+![alt text](image-58.png)
 
 
 

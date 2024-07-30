@@ -9,4 +9,5 @@ public class S7DswMongodbRest2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(S7DswMongodbRest2Application.class, args);
 	}
+
 }

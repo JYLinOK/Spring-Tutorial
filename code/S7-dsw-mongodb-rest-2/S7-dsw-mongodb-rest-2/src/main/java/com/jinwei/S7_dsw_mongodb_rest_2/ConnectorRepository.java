@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface ConnectorRepository extends MongoRepository<Connector, String> {
     // 自定义查询方法
-    List<Connector> findByID(String id);
     List<Connector> findByCacert(String cacert);
     List<Connector> findByDescription(String description);
 }
-
