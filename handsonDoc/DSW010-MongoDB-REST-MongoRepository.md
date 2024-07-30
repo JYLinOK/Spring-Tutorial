@@ -6,7 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [../code/S6-dsw-mongodb-rest](../code/S6-dsw-mongodb-rest/)
+Code: [../code/S7-dsw-mongodb-rest-2/](../code/S7-dsw-mongodb-rest-2/)
 
 
 ## SpringBoot Initializr 创建项目

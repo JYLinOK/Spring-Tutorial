@@ -42,6 +42,8 @@ Project Lombok是一个java库，可以自动插入到编辑器和构建工具�
 
 代码：build.gradle
 
+格式：
+
 ```gradle
 repositories {
 	mavenCentral()
@@ -56,47 +58,66 @@ dependencies {
 }
 ```
 
-## 引入后重新进行主文件编译会出现自动下载 lombok依赖
-![alt text](image-55.png)
-
-注意：引入后需要重启，然后可以看到注解 @Data可用
-
-![alt text](image-56.png)
-
 ---
 
 ## 创建实体类：Connector
 
-代码：com/jinwei/S7_dsw_mongodb_rest_2/Connector.java
+代码：com/jinwei/S8_dsw_Mongotemplate_CDUR/Connector.java
 
 ```java
-package com.jinwei.S7_dsw_mongodb_rest_2;
+package com.jinwei.S8_dsw_Mongotemplate_CDUR;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+import java.util.Date;
 
-@Document(collection = "connector")
-@Data  // lombok-setter-getter-toString等
-@NoArgsConstructor   // lombok-无参构造
-@AllArgsConstructor  //lombok-全参构造
+@Data  // lombok-setter-getter-toString等自动构建
+@ToString  // lombok-ToString自动构建
+@Accessors(chain = true)  // 启动lombok的链式编程模式
 public class Connector {
-    @Id
-    private String id;  // 自动赋值属性
 
-    // 自定义属性
-    private String cacert;
+    @MongoId
+    private String id; // 使用 @MongoID 注解可以更清晰的指定 _id主键
     private String description;
+    private String type;
+    @JsonFormat( pattern ="yyyy-MM-dd", timezone ="GMT+8")
+    private Date registerDay;
+    @JsonFormat( pattern ="yyyy-MM-dd", timezone ="GMT+8")
+    private Date loginDay;
+    private CAcert cacert;
+
 }
 ```
 
+## 链式编程：创建实体类的-属性类：Connector-CAcert
 
+代码：com/jinwei/S8_dsw_Mongotemplate_CDUR/CAcert.java
 
+```java
+package com.jinwei.S8_dsw_Mongotemplate_CDUR;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import java.util.Date;
 
+@Data
+@ToString
+@Accessors(chain = true)
+public class CAcert {
+    private String caContent;
+    private String caType;
+    private String caDescription;
+    @JsonFormat( pattern ="yyyy-MM-dd", timezone ="GMT+8")
+    private Date caRegisterDay;
+}
+```
 
+## 
 
 
 
