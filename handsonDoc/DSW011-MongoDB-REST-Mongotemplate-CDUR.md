@@ -6,7 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [../code/S6-dsw-mongodb-rest](../code/S6-dsw-mongodb-rest/)
+Code: [../code/S8-dsw-Mongotemplate-CDUR](../code/S8-dsw-Mongotemplate-CDUR/)
 
 
 ## SpringBoot Initializr 创建项目
@@ -17,15 +17,9 @@ Code: [../code/S6-dsw-mongodb-rest](../code/S6-dsw-mongodb-rest/)
 ### 引入 lombok
 
 代码：build.gradle
-
+格式：
 ```gradle
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	
+dependencies {	
  	compileOnly 'org.projectlombok:lombok:1.18.34'
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 	
@@ -34,57 +28,23 @@ dependencies {
 }
 ```
 
-如果没有成功加载 lombok，刷新gradle或者重启IDEA即可。
+### 引入 swagger-APIs管理：https://swagger.io/
 
-
-### 引入 swaggerAPI管理：https://swagger.io/
-
-Gradle官网搜索插件：
-https://plugins.gradle.org/search?term=swagger
-![alt text](image-61.png)
-
-![alt text](image-62.png)
+Maven官网带UI插件：
+https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 
 代码：build.gradle
+格式：
 
-Groovy 格式：
-```gradle
-plugins {
-  id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.22"
-}
-```
-或：
+https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui/2.6.0
 
 ```gradle
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "io.swagger.core.v3:swagger-gradle-plugin:2.2.22"
-  }
-}
-
-apply plugin: "io.swagger.core.v3.swagger-gradle-plugin"
+// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 ```
 
-Maven 格式：
 
-```gradle
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation group: 'io.swagger.core.v3', name: 'swagger-core', version: '2.2.22'
-}
-```
-
-### build.gradle
-
-代码：
+### 整体 build.gradle文件
 ```gradle
 plugins {
 	id 'java'
@@ -119,13 +79,16 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.34'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
-	implementation group: 'io.swagger.core.v3', name: 'swagger-core', version: '2.2.22'
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 ```
+
+引入后新依赖后，需要重启IDEA.
+
 
 ## 设置 IDEA-MongoDB数据库
 

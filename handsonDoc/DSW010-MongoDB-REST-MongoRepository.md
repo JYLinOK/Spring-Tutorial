@@ -54,7 +54,7 @@ dependencies {
 ## 引入后重新进行主文件编译会出现自动下载 lombok依赖
 ![alt text](image-55.png)
 
-注意：引入后需要重启，然后可以看到注解 @Data可用
+注意：引入后需要重启Gradle或者IDEA，然后可以看到注解 @Data可用
 
 ![alt text](image-56.png)
 
