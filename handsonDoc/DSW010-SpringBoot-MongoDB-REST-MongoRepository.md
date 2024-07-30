@@ -102,46 +102,6 @@ tasks.named('test') {
 
 ---
 
-## 创建实体类：Connector
-
-代码：com/jinwei/S7_dsw_mongodb_rest_2/Connector.java
-
-```java
-package com.jinwei.S7_dsw_mongodb_rest_2;
-
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "connector")
-@Data
-public class Connector {
-    @Id
-    private String id;  // 自动赋值属性
-
-    // 自定义属性
-    private String cacert;
-    private String description;
-}
-```
-
-## 创建基于实体类的仓库类：ConnectorRepository
-
-代码：com/jinwei/S7_dsw_mongodb_rest_2/ConnectorRepository.java
-
-```java
-package com.jinwei.S7_dsw_mongodb_rest_2;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import java.util.List;
-
-public interface ConnectorRepository extends MongoRepository<Connector, String> {
-    // 自定义查询方法
-    List<Connector> findByID(String id);
-    List<Connector> findByCacert(String cacert);
-    List<Connector> findByDescription(String description);
-}
-```
-
 ## 设置 IDEA-MongoDB数据库
 
 在：resources/application.properties：中配置
@@ -212,8 +172,92 @@ public class S7DswMongodbRest2Application {
 }
 ```
 
-## 创建基于实体类的服务类：ConnectorService
+## 创建实体类：Connector
 
+代码：com/jinwei/S7_dsw_mongodb_rest_2/Connector.java
+
+```java
+package com.jinwei.S7_dsw_mongodb_rest_2;
+
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "connector")
+@Data
+public class Connector {
+    @Id
+    private String id;  // 自动赋值属性
+
+    // 自定义属性
+    private String cacert;
+    private String description;
+}
+```
+
+## 创建基于实体类的仓库类：Connector
+代码：com/jinwei/S7_dsw_mongodb_rest_2/ConnectorRepository.java
+```java
+package com.jinwei.S7_dsw_mongodb_rest_2;
+
+import com.jinwei.S7_dsw_mongodb_rest_2.ConnectorRepository;
+import com.jinwei.S7_dsw_mongodb_rest_2.Connector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class ConnectorService {
+    private final ConnectorRepository connectorRepository;
+
+    @Autowired
+    public ConnectorService(ConnectorRepository connectorRepository) {
+        this.connectorRepository = connectorRepository;
+    }
+
+    public List<Connector> findByCacert(String cacert) {
+        return connectorRepository.findByCacert(cacert);
+    }
+
+    public List<Connector> findByDescription(String description) {
+        return connectorRepository.findByDescription(description);
+    }
+
+}
+```
+
+
+## 创建基于实体类的服务类：ConnectorService
+代码：com/jinwei/S7_dsw_mongodb_rest_2/ConnectorController.java
+
+```java
+package com.jinwei.S7_dsw_mongodb_rest_2;
+
+import com.jinwei.S7_dsw_mongodb_rest_2.ConnectorRepository;
+import com.jinwei.S7_dsw_mongodb_rest_2.Connector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class ConnectorService {
+    private final ConnectorRepository connectorRepository;
+
+    @Autowired
+    public ConnectorService(ConnectorRepository connectorRepository) {
+        this.connectorRepository = connectorRepository;
+    }
+
+    public List<Connector> findByCacert(String cacert) {
+        return connectorRepository.findByCacert(cacert);
+    }
+
+    public List<Connector> findByDescription(String description) {
+        return connectorRepository.findByDescription(description);
+    }
+
+}
+```
 
 
 ## 创建基于实体类的控制类：ConnectorController 
@@ -221,12 +265,39 @@ public class S7DswMongodbRest2Application {
 代码：com/jinwei/S7_dsw_mongodb_rest_2/ConnectorController.java
 
 ```java
+package com.jinwei.S7_dsw_mongodb_rest_2;
 
+import com.jinwei.S7_dsw_mongodb_rest_2.Connector;
+import com.jinwei.S7_dsw_mongodb_rest_2.ConnectorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class ConnectorController {
+
+    @Autowired
+    private ConnectorService connectorService;
+
+    @GetMapping("/list")
+    public HashMap<String,Object> getConnectorsList() {
+        String cacert = "cacert-001";
+        HashMap<String, Object> connector=new HashMap<>();
+        List<Connector> connectorList=connectorService.findByCacert(cacert);
+        connector.put("connectors", connectorList);
+        return connector;
+    }
+}
 ```
 
 ## 运行主程序
 
-![alt text](image-59.png)
+![alt text](image-58.png)
 
 ## Postman测试
 
@@ -234,8 +305,8 @@ code:
 ```bash
 http://localhost:8080/api/list
 ```
+![alt text](image-59.png)
 
-![alt text](image-58.png)
 
 
 

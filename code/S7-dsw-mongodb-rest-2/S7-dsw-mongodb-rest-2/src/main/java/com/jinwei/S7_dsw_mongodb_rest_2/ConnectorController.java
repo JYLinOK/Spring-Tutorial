@@ -15,13 +15,13 @@ import java.util.List;
 public class ConnectorController {
 
     @Autowired
-    private ConnectorService bookService;
+    private ConnectorService connectorService;
 
     @GetMapping("/list")
-    public HashMap<String,Object> getBookList() {
+    public HashMap<String,Object> getConnectorsList() {
         String cacert = "cacert-001";
         HashMap<String, Object> connector=new HashMap<>();
-        List<Connector> connectorList=bookService.findByCacert(cacert);
+        List<Connector> connectorList=connectorService.findByCacert(cacert);
         connector.put("connectors", connectorList);
         return connector;
     }
