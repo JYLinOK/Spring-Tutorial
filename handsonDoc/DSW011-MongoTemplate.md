@@ -38,6 +38,10 @@ dependencies {
 ```gradle
 // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.6'
+implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.6'
+implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
+runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
+runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
 ```
 
 
