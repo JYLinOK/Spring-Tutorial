@@ -6,7 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [../code/](../code/)
+Code: [../code/S8-1-mongotemplate-JWT-JSON](../code/S8-1-mongotemplate-JWT-JSON/)
 
 
 ## JWT Json-Web-Token官网：https://jwt.io/
