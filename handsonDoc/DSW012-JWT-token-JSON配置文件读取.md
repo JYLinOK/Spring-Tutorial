@@ -1,4 +1,4 @@
-# DSW011-JWT-token
+# DSW012-JWT-token-JSON配置文件读取
 
 lin-jinwei
 
@@ -46,8 +46,6 @@ jwt.sub="SUBJECT_zhuti"
 #jwt.iat="IAT_qianfatime"
 #jwt.jti="JTI_onlyID"
 ```
-
-如果不是使用@Value等依赖注入方式，请使用下一节的JSON配置文件读取方式。
 
 
 ### JWT工具类-JWTUtil: 
