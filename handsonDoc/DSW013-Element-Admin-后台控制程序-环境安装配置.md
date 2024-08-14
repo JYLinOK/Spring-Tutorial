@@ -1,4 +1,4 @@
-# DSW013-Element-UI-后台控制程序-环境安装配置
+# DSW013-Element-Admin-后台控制程序-环境安装配置.md
 
 lin-jinwei
 
@@ -140,7 +140,10 @@ npm run dev
 ![alt text](image-85.png)
 
 
+## 退出控制台
 
+可以直接通过点击退出按钮退出：
+![alt text](image-98.png)
 
 
 

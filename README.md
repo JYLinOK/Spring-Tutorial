@@ -34,10 +34,9 @@
 ##### [DSW010-MongoDB-REST-MongoRepository](handsonDoc/DSW010-MongoDB-REST-MongoRepository.md)
 ##### [DSW011-JWT-token](handsonDoc/DSW011-JWT-token.md)
 ##### [DSW012-JWT-token-JSON配置文件读取](handsonDoc/DSW012-JWT-token-JSON配置文件读取.md)
-##### [DSW013-Element-UI-后台控制程序-环境安装配置](handsonDoc/DSW013-Element-UI-后台控制程序-环境安装配置.md)
-##### [DSW014-MongoTemplate](handsonDoc/DSW020-MongoTemplate.md)
-##### [DSW015-MongoDB-REST-Mongotemplate-CDUR](handsonDoc/DSW021-MongoDB-REST-Mongotemplate-CDUR.md)
-
+##### [DSW013-Element-Admin-后台控制程序-环境安装配置](handsonDoc/DSW013-Element-Admin-后台控制程序-环境安装配置.md)
+##### [DSW014-MongoTemplate](handsonDoc/DSW090-MongoTemplate.md)
+##### [DSW015-MongoDB-REST-Mongotemplate-CDUR](handsonDoc/DSW091-MongoDB-REST-Mongotemplate-CDUR.md)
 
 
 ### Ubuntu
