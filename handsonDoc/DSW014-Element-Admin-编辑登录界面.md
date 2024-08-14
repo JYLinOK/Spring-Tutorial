@@ -246,6 +246,27 @@ export default {
 ![alt text](image-97.png)
 
 
+### 编辑认证js
+
+![alt text](image-99.png)
+
+代码：src\utils\validate.js
+
+新增：
+```js
+export function validCacert(str) {
+  const valid_map = ['ca']
+  return valid_map.indexOf(str.trim()) >= 0
+}
+```
+
+### 编辑登录 index.vue
+
+代码：src\views\login\index.vue
+```js
+import { validUsername,  validCacert} from '@/utils/validate'
+```
+
 ### 修改handleLogin()函数
 
 ```js
@@ -271,7 +292,12 @@ handleLogin() {
     },
 ```
 
+### 运行：npm run dev
+![alt text](image-100.png)
 
+点击登录成功：
+
+![alt text](image-101.png)
 
 
 
