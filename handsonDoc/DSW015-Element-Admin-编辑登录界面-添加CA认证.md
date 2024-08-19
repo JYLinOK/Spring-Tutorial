@@ -161,6 +161,11 @@ readerData(rawFile) {
     },
 ```
 
+### 父组件直接获取子组件的值-变量值
 
+```js
+// 父组件直接获取子组件的值
+value = this.$refs.UploadJson.uploadForm.jsonData
+```
 
 
