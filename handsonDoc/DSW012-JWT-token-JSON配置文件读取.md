@@ -8,6 +8,11 @@ lin-jinwei
 
 Code: [../code/S8-1-mongotemplate-JWT-JSON](../code/S8-1-mongotemplate-JWT-JSON/)
 
+## 使用 SpringBoot Initializr: https://start.spring.io/
+
+添加依赖：
+![alt text](image-102.png)
+
 
 ## JWT Json-Web-Token官网：https://jwt.io/
 
@@ -22,7 +27,7 @@ runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
 runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
 ```
 
-#### JWT-可选
+#### Gson-可选
 
 
 ```gradle
@@ -220,7 +225,8 @@ public class JsonUtil {
 ```
 
 ## 配置类-JWTConfig
-```
+
+```java
 package com.jinwei.S8_mongotemplate;
 
 public class JWTConfig
