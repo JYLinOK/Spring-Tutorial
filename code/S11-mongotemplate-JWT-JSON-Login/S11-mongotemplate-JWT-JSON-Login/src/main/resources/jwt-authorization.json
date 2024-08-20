@@ -1,0 +1,12 @@
+{
+  "secret": "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
+  "iss": "ISS_qianfafang",
+  "subject": "SUBJECT_zhuti",
+  "aud": "ADU_jieshoufang",
+  "exp": "EXP_chaoshitime",
+  "nbf": "NBF_starttime",
+  "iat": "IAT_qianfatime",
+  "jti": "JTI_onlyID",
+  "user0":"Jinwei",
+  "pw0": "pw0"
+}

@@ -14,7 +14,7 @@ Code: [../code/S10-vue-element-admin-edit](../code/S10-vue-element-admin-edit/)
 
 ## SpringBoot后台程序
 
-Code: [../code/S11_mongotemplate_JWT_JSON_Login](../code/S11_mongotemplate_JWT_JSON_Login/)
+Code: [../code/S11-mongotemplate-JWT-JSON-Login](../code/S11-mongotemplate-JWT-JSON-Login/)
 
 ## 创建：注册：拦截器配置类-InterceptorConfig
 
