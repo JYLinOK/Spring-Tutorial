@@ -16,534 +16,880 @@ Code: [../code/S10-vue-element-admin-edit](../code/S10-vue-element-admin-edit/)
 
 Code: [../code/S11_mongotemplate_JWT_JSON_Login](../code/S11_mongotemplate_JWT_JSON_Login/)
 
-## 创建：注册：拦截器配置类-InterceptorConfig
+## src\views\login\index.vue
 
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
+```js
+<template>
+  <div class="login-container">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on"
+      label-position="left">
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+      <div class="title-container">
+        <h3 class="title">Connector</h3>
+        <h5 class="title">开发者:林进威 测试项目: DS数据空间 </h5>
+      </div>
 
-//        registration.addPathPatterns("/**"); //所有路径都被拦截
-//        registration.excludePathPatterns("" +
-//                        "/assets/**",             // assets文件夹里文件不拦截
-//                "/**/*.js",              //js静态资源不拦截
-//                "/**/*.css"             //css静态资源不拦截
+      <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text"
+          tabindex="1" autocomplete="on" />
+      </el-form-item>
 
-@Configuration
-@Slf4j
-public class InterceptorConfig extends WebMvcConfigurationSupport {
-    @Autowired
-    private AuthenticationInterceptor authenticationInterceptor;
-    // 注册-自定义拦截器-registry
-    protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login");
+      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+        <el-form-item prop="password">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
+          <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType"
+            placeholder="Password" name="password" tabindex="2" autocomplete="on" @keyup.native="checkCapslock"
+            @blur="capsTooltip = false" @keyup.enter.native="handleLogin" />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
+        </el-form-item>
+      </el-tooltip>
+
+      <!-- <el-form-item prop="cacert">
+        <span class="svg-container">
+          <svg-icon icon-class="guide" />
+        </span>
+        <el-input ref="cacert" v-model="loginForm.cacert" placeholder="CA-Certification" name="cacert" type="text"
+          tabindex="1" autocomplete="on" />
+      </el-form-item> -->
+
+      <br>
+
+      <div>
+        <b class="noteFont">CA-Certification</b>
+        <br>
+        <br>
+        <UploadJson ref='UploadJson' v-model="loginForm.cacert" />
+      </div>
+
+      <br>
+      <br>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin">Login</el-button>
+
+      <div style="position:relative">
+        <!-- <div class="tips">
+          <span>Username : admin</span>
+          <span>Password : any</span>
+        </div> -->
+        <!-- <div class="tips">
+          <span style="margin-right:18px;">Username : editor</span>
+          <span>Password : any</span>
+        </div> -->
+
+        <el-button class="thirdparty-button2" type="primary" @click="showDialog = true">
+          更多登录方式
+        </el-button>
+      </div>
+
+      <br>
+      <br>
+
+    </el-form>
+
+    <el-dialog title="Or connect with" :visible.sync="showDialog">
+      Can not be simulated on local, so please combine you own business simulation! ! !
+      <br>
+      <br>
+      <br>
+      <social-sign />
+    </el-dialog>
+
+  </div>
+</template>
+
+<script>
+import { validUsername } from '@/utils/validate'
+// import Upload from '@/components/Upload/SingleImage3'
+import UploadJson from '@/components/UploadJson/index.vue'
+import SocialSign from './components/SocialSignin'
+import axios from 'axios'
+
+export default {
+  name: 'Login',
+  components: { SocialSign, UploadJson },
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      console.log('username value = ' + value)
+      if (!validUsername(value)) {
+        this.bool_validateUsername = false
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        this.bool_validateUsername = true
+        console.log('this.bool_validateUsername = ' + this.bool_validateUsername)
+        callback()
+      }
     }
+
+    // 添加-认证CA证书-初步认证
+    const validateCacert = (rule, value, callback) => {
+      // 父组件直接获取子组件的值
+      this.jsonStr = this.$refs.UploadJson.uploadForm.jsonData
+      // console.log('\n\nca this.jsonStr = ' + this.jsonStr)
+      // console.log('ca value = ' + value)
+      this.loginForm.cacert = this.jsonStr
+      // console.log('ca this.loginForm.cacert = ' + this.loginForm.cacert)
+
+      if (this.loginForm.cacert < 6) {
+        this.bool_validateCacert = false
+        callback(new Error('The ca cert can not be less than 6 digits'))
+      } else {
+        this.bool_validateCacert = true
+        callback()
+      }
+    }
+
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 2) {
+        this.bool_validatePassword = false
+        callback(new Error('The password can not be less than 2 digits'))
+      } else {
+        this.bool_validatePassword = true
+        callback()
+      }
+    }
+
+    return {
+      loginForm: {
+        username: 'Jinwei',
+        cacert: 'CA',
+        password: 'pw0',
+      },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        cacert: [{ required: true, trigger: 'change', validator: validateCacert }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      passwordType: 'password',
+      capsTooltip: false,
+      loading: false,
+      showDialog: false,
+      redirect: undefined,
+      otherQuery: {},
+      bool_validateUsername: false,
+      bool_validatePassword: false,
+      bool_validateCacert: false,
+      jsonStr: '',
+    }
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
+    }
+  },
+  created() {
+    // window.addEventListener('storage', this.afterQRScan)
+  },
+  mounted() {
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
+    }
+  },
+  destroyed() {
+    // window.removeEventListener('storage', this.afterQRScan)
+  },
+  methods: {
+    async validCacert2(str, userName, userPW) {
+      let url = 'api/backuser/login'
+
+      let data = new FormData();
+      data.append('idName', userName);
+      data.append('idPW', userPW);
+      data.append('cacert', str);
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+
+      // let code = 200
+      let re = false
+      await axios.post(url, data, config).then((response) => {
+        // console.log("response.data = " + response.data);
+        // console.log("response.status = " + response.status);
+        re = true
+      }).catch(function (err) {
+        console.log("err = " + err)
+        re = false
+        // console.log("1 re = " + re)
+      });
+      console.log("2 re = " + re)
+      return re
+    },
+    checkCapslock(e) {
+      const { key } = e
+      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
+    },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
+    handleLogin() {
+      this.validCacert2(this.jsonStr, this.loginForm.username, this.loginForm.password).then((re) => {
+        console.log('\n\n=================================')
+        console.log('validCacert2 re = ' + re)
+
+        // CA证书认证通过后-运行代码
+        this.$refs.loginForm.validate(valid => {
+          console.log('valid = ' + valid)
+          console.log('this.bool_validateUsername = ' + this.bool_validateUsername)
+          console.log('this.bool_validateCacert = ' + this.bool_validateCacert)
+          console.log('this.bool_validatePassword = ' + this.bool_validatePassword)
+
+          if (valid && this.bool_validateUsername && this.bool_validateCacert && this.bool_validatePassword && re) {
+            this.loading = true
+            console.log('logging ===>')
+
+            // 使用store存储数据
+            this.$store.dispatch('user/login', this.loginForm)
+              .then(() => {
+                // 正式启动后的运行代码
+                this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                this.loading = false
+              })
+              .catch(() => {
+                this.loading = false
+              })
+            this.$message({
+              duration: 5000,
+              message: '登录成功！',
+              type: 'success',
+              center: true
+            })
+          } else {
+            this.$message({
+              duration: 2000,
+              message: '输出信息错误',
+              type: 'error',
+              center: true
+            })
+            return false
+          }
+        })
+
+      }).catch(() => {
+        console.log('登录错误2')
+        this.loading = false
+      })
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
+    }
+    // afterQRScan() {
+    //   if (e.key === 'x-admin-oauth-code') {
+    //     const code = getQueryObject(e.newValue)
+    //     const codeMap = {
+    //       wechat: 'code',
+    //       tencent: 'code'
+    //     }
+    //     const type = codeMap[this.auth_type]
+    //     const codeName = code[type]
+    //     if (codeName) {
+    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
+    //         this.$router.push({ path: this.redirect || '/' })
+    //       })
+    //     } else {
+    //       alert('第三方登录失败')
+    //     }
+    //   }
+    // }
+  }
+}
+</script>
+
+<style lang="scss">
+// 自定义
+
+.noteFont {
+  color: white;
+}
+</style>
+
+<style lang="scss">
+/* 修复input 背景不协调 和光标变色 */
+/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+
+.noteFont {
+  color: white;
+}
+
+$bg: #283443;
+$light_gray: #fff;
+$cursor: #fff;
+
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+  .login-container .el-input input {
+    color: $cursor;
+  }
+}
+
+/* reset element-ui css */
+.login-container {
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+      caret-color: $cursor;
+
+      &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
+      }
+    }
+  }
+
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #454545;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
+.login-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
+
+  .login-form {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .thirdparty-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    width: auto;
+    margin: auto 0;
+  }
+
+  .thirdparty-button2 {
+    width: 100%;
+    margin: auto 0;
+    // margin-left: 20%;
+    background-color: #c6d4ca38;
+  }
+
+  @media only screen and (max-width: 470px) {
+    .thirdparty-button {
+      display: none;
+    }
+  }
+}
+</style>
+```
+
+## src\utils\validate.js
+
+```js
+import axios from 'axios'
+
+
+export function delayMsAsync(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('done');
+    }, ms);
+  });
+}
+
+/**
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validUsername(str) {
+  const valid_map = ['Jinwei', 'admin', 'editor']
+  return valid_map.indexOf(str.trim()) >= 0
+}
+
+
+/**
+ * @param {string} url
+ * @returns {Boolean}
+ */
+export function validURL(url) {
+  const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
+  return reg.test(url)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validLowerCase(str) {
+  const reg = /^[a-z]+$/
+  return reg.test(str)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validUpperCase(str) {
+  const reg = /^[A-Z]+$/
+  return reg.test(str)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validAlphabets(str) {
+  const reg = /^[A-Za-z]+$/
+  return reg.test(str)
+}
+
+/**
+ * @param {string} email
+ * @returns {Boolean}
+ */
+export function validEmail(email) {
+  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return reg.test(email)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function isString(str) {
+  if (typeof str === 'string' || str instanceof String) {
+    return true
+  }
+  return false
+}
+
+/**
+ * @param {Array} arg
+ * @returns {Boolean}
+ */
+export function isArray(arg) {
+  if (typeof Array.isArray === 'undefined') {
+    return Object.prototype.toString.call(arg) === '[object Array]'
+  }
+  return Array.isArray(arg)
 }
 ```
 
-## 创建：拦截器类-AuthenticationInterceptor
+## src\components\UploadJson\index.vue
 
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
+```js
+<template>
+  <div class="jsonBox">
+    <el-form-item prop="cacert">
+      <span class="svg-container">
+        <svg-icon icon-class="guide" />
+      </span>
+      <el-input ref="cacert" v-model="uploadForm.jsonData" class="noteFontJson" placeholder="直接填写-复制或者上传" name="cacert"
+        type="text" tabindex="1" autocomplete="on" />
+    </el-form-item>
 
-import com.alibaba.fastjson2.JSONObject;
-import com.google.gson.Gson;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerInterceptor;
+    <input ref="json-upload-input"  class="json-upload-input" type="file" accept=".json" @change="handleClick">
+    <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
+      拖拽或点击上传
+      <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">
+        上传
+      </el-button>
+    </div>
+  </div>
+</template>
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+<script>
+// import { ElMessage } from 'element-plus'
 
-@Component
-public class AuthenticationInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        boolean result = true;
-        //判断当前拦截到的是Controller的方法还是其他资源
-        //当前拦截到的不是动态方法，直接放行
-        if (handler instanceof HandlerMethod) {
+export default {
+  props: {
+    beforeUpload: Function, // eslint-disable-line
+    onSuccess: Function// eslint-disable-line
+  },
+  data() {
+    return {
+      uploadForm: {
+        jsonData: ''
+      },
+      loading: false,
+      excelData: {
+        header: null,
+        results: null
+      }
+    }
+  },
+  methods: {
+    generateData({ header, results }) {
+      this.excelData.header = header
+      this.excelData.results = results
+      this.onSuccess && this.onSuccess(this.excelData)
+    },
+    handleDrop(e) {
+      e.stopPropagation()
+      e.preventDefault()
+      if (this.loading) return
+      const files = e.dataTransfer.files
+      if (files.length !== 1) {
+        this.$message.error('只能上传一个文件')
+        return
+      }
+      const rawFile = files[0] // only use files[0]
 
-            // 获取JWT配置-对象-GSON
-            String jsonFile = "jwt-authorization.json";
-            JsonUtil jsonUtil = new JsonUtil();
-            String jsonStr;
+      if (!this.isJson(rawFile)) {
+        this.$message.error('请上传json文件')
+        return false
+      }
+      this.upload(rawFile)
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    handleDragover(e) {
+      e.stopPropagation()
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+    },
+    handleUpload() {
+      this.$refs['json-upload-input'].click()
+    },
+    handleClick(e) {
+      const files = e.target.files
+      const rawFile = files[0] // only use files[0]
+      if (!rawFile) return
+      this.upload(rawFile)
+    },
+    upload(rawFile) {
+      this.$refs['json-upload-input'].value = null // fix can't select the same excel
 
-            try {
-                jsonStr = jsonUtil.readJSON(jsonFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+      if (!this.beforeUpload) {
 
-            Gson gson = new Gson();
-            JWTConfig jwtConfig = gson.fromJson(jsonStr, JWTConfig.class);
-            System.out.println("jwtConfig.secret = " + jwtConfig.secret);
+        this.$message({
+          duration: 3000,
+          message: 'CA证书输入成功! 点击 Login-验证登录！',
+          type: 'success'
+        })
 
-            Map<String, String> ParameterMap = new HashMap<String, String>(); //map参数
-            Map<String, String[]> map=request.getParameterMap(); //请求中的map数组
-            for(String key :map.keySet()) { //遍历数组
-                ParameterMap.put(key, map.get(key)[0]); //将值key，key对应的的value 赋值到map参数中
-            }
-            System.out.println("map = " + map);
-            System.out.println("ParameterMap = " + ParameterMap);
-            System.out.println("ParameterMap.get(\"idPW\") = " + ParameterMap.get("idPW"));
-            System.out.println("ParameterMap.get(\"idName\") = " + ParameterMap.get("idName"));
-            System.out.println("ParameterMap.get(\"cacert\") = " + ParameterMap.get("cacert"));
+        this.readerData(rawFile)
+        return
+      }
+      const before = this.beforeUpload(rawFile)
+      if (before) {
+        this.readerData(rawFile)
+      }
+    },
+    readerData(rawFile) {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = e => {
+          // console.log('reader.onload = e => ========================')
 
-            JSONObject cacertJsonObj = JSONObject.parseObject(ParameterMap.get("cacert"));  // 将json字符串转换成对象
-            String cacert = cacertJsonObj.get("cacert").toString();
-            System.out.println("cacert = " + cacert);
+          // 获取读取到的文件内容+解析JSON文件
+          const contents = reader.result
+          // console.log('contents = ' + contents)
+          // console.log('contents.byteLength = ' + contents.byteLength)
+          const jsonData = String.fromCharCode.apply(null, new Uint8Array(contents))
+          // console.log('jsonData = ' + jsonData)
+          // console.log('typeof jsonData = ' + typeof jsonData);
+          this.uploadForm.jsonData = jsonData
 
-            //2、校验令牌
-            try {
-                JWTUtil jwtUtil = new JWTUtil();
-                Jws<Claims> jwtoken = jwtUtil.parseJWTToken(cacert);
-                System.out.println("jwtoken = " + jwtoken);
+          // ========================
+          // 继续处理读取数据
 
-                Claims payload  = jwtUtil.parsePayload(cacert);
-                String payloadStr  = payload.get("payload").toString();
-                System.out.println("payloadStr = " + payloadStr);
 
-                String[] strList = payloadStr.split("===");
-                System.out.println("strList = " + strList);
-                System.out.println("strList[0] = " + strList[0]);
-                System.out.println("strList[1] = " + strList[1]);
 
-                if (strList[1].equals(jwtConfig.secret)) {
-                    result = true;
-                    System.out.println("jwt-正确-不拦截");
-                } else {
-                    result = false;
-                    System.out.println("jwt-不正确-拦截");
+          // ========================
+
+          this.loading = false
+          resolve()
+        }
+        reader.readAsArrayBuffer(rawFile)
+      })
+    },
+    isJson(file) {
+      // return /\.(json|text|csv)$/.test(file.name)
+      return /\.(json)$/.test(file.name)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.noteFontJson {
+  color: rgb(10, 2, 2);
+  /* background-color: rgb(0, 20, 56); */
+}
+
+.jsonBox {
+  color: aqua;
+  /* background-color: rgb(233, 229, 226); */
+  background-color: rgba(192, 220, 223, 0.6);
+}
+
+.json-upload-input {
+  display: none;
+  z-index: -9999;
+}
+
+.drop {
+  border: 2px dashed #bbb;
+  width: 100%;
+  height: 160px;
+  line-height: 160px;
+  margin: 0 auto;
+  font-size: 24px;
+  border-radius: 5px;
+  text-align: center;
+  color: #05160ccc;
+  position: relative;
+}
+</style>
+```
+
+
+## .env.development
+
+```js
+# just a flag
+ENV = 'development'
+
+# base api
+VUE_APP_BASE_API = '/dev-api'
+
+# backend-api
+BACKEND_API = 'http://localhost:8081'
+```
+
+
+## .env.production
+
+```js
+# just a flag
+ENV = 'production'
+
+# base api
+VUE_APP_BASE_API = '/prod-api'
+
+# backend-api
+BACKEND_API = 'http://localhost:8081'
+```
+
+
+## vue.config.js
+
+```js
+'use strict'
+const path = require('path')
+const defaultSettings = require('./src/settings.js')
+
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
+
+const name = defaultSettings.title || 'vue Element Admin' // page title
+const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+
+module.exports = {
+  publicPath: '/',
+  outputDir: 'dist',
+  assetsDir: 'static',
+  lintOnSave: process.env.NODE_ENV === 'development',
+  productionSourceMap: false,
+  devServer: {
+    port: port,
+    open: true,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
+    before: require('./mock/mock-server.js'),
+    proxy: {
+      // 设置后端API-跨域
+      '/api': {
+        // target: 'http://localhost:8081',  // 跨域真实请求后端-URl地址
+        target: process.env.BACKEND_API,  // 跨域真实请求后端-URl地址
+        ws: true,
+        changeOrigin: true,  // 设置允许跨域
+        // pathRewrite: {  // 替换-通配 /api 的替换成对应字符
+        // //  重写路径=> http://localhost:8080/api/xxx = http://localhost:8081/xxx
+        '^/api': ''  // 当你的接口中没有/api字眼时，用这种方式，替换成空''
+        // //  '^/api': '/api'   //当接口中有/api时，用这种方式
+        // }
+      }
+    }
+
+  },
+  configureWebpack: {
+    name: name,
+    resolve: {
+      alias: {
+        '@': resolve('src')
+      }
+    }
+  },
+  chainWebpack(config) {
+    config.plugin('preload').tap(() => [
+      {
+        rel: 'preload',
+        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+        include: 'initial'
+      }
+    ])
+
+    config.plugins.delete('prefetch')
+    config.module
+      .rule('svg')
+      .exclude.add(resolve('src/icons'))
+      .end()
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/icons'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      })
+      .end()
+
+    config
+      .when(process.env.NODE_ENV !== 'development',
+        config => {
+          config
+            .plugin('ScriptExtHtmlWebpackPlugin')
+            .after('html')
+            .use('script-ext-html-webpack-plugin', [{
+              inline: /runtime\..*\.js$/
+            }])
+            .end()
+          config
+            .optimization.splitChunks({
+              chunks: 'all',
+              cacheGroups: {
+                libs: {
+                  name: 'chunk-libs',
+                  test: /[\\/]node_modules[\\/]/,
+                  priority: 10,
+                  chunks: 'initial' // only package third parties that are initially dependent
+                },
+                elementUI: {
+                  name: 'chunk-elementUI', // split elementUI into a single package
+                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+                },
+                commons: {
+                  name: 'chunk-commons',
+                  test: resolve('src/components'), // can customize your rules
+                  minChunks: 3, //  minimum common number
+                  priority: 5,
+                  reuseExistingChunk: true
                 }
-
-            } catch (Exception e) {
-                //4、不通过，响应401状态码
-                response.setStatus(401);
-                result = false;
-            }
+              }
+            })
+          config.optimization.runtimeChunk('single')
         }
-
-        System.out.println("=======================================================");
-        return result;
-    }
-}
-```
-
-## 创建：用户类-User
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-import lombok.*;
-import org.springframework.data.mongodb.core.mapping.MongoId;
-
-@Data
-//@AllArgsConstructor
-public class User {
-    @MongoId
-    private String id;
-
-    public User(String idName, String idPW) {
-    }
-}
-```
-
-## 创建：用户控制类-UserController
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-import com.google.gson.Gson;
-import com.mongodb.client.result.UpdateResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.mongodb.core.MongoTemplate;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import static com.jinwei.S11_mongotemplate_JWT_JSON_Login.JWTUtil.jwtConfig;
-
-
-@RestController
-@RequestMapping("api/backuser")
-public class UserController {
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    // 用户登录-User-通过参数-idName-idPW
-    @RequestMapping(value="/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(String idName, String idPW) throws IOException {
-        List<User> find_loginUser = mongoTemplate.find(Query.query(Criteria.where("idName").is(idName).and("idPW").is(idPW)), User.class);
-        System.out.println("find_loginUser = " + find_loginUser);
-        if (find_loginUser != null && find_loginUser.size() != 0) {
-
-            JWTUtil jwtUtil = new JWTUtil();
-            String jwtoken = jwtUtil.genJWTToken(idName);
-            System.out.println("jwtoken = " + jwtoken);
-
-            System.out.println("User "+idName +" logined successfully!");
-            return ResponseEntity.ok("User "+idName +" logined successfully!");
-        } else {
-            // 获取JWT配置-对象-GSON
-//            String jsonFile = "jwt-authorization.json";
-//            JsonUtil jsonUtil = new JsonUtil();
-//            String jsonStr;
-//
-//            try {
-//                jsonStr = jsonUtil.readJSON(jsonFile);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            Gson gson = new Gson();
-//            JWTConfig jwtConfig = gson.fromJson(jsonStr, JWTConfig.class);
-//            System.out.println("jwtConfig.secret = " + jwtConfig.secret);
-
-            System.out.println("idName = " + idName);
-            System.out.println("idPW = " + idPW);
-            System.out.println("jwtConfig.user0 = " + jwtConfig.user0);
-            System.out.println("jwtConfig.pw0 = " + jwtConfig.pw0);
-
-            if (idName.equals(jwtConfig.user0) && idPW.equals(jwtConfig.pw0)) {
-                System.out.println("Default User logined successfully!");
-                return ResponseEntity.ok("Default User logined successfully!");
-            } else {
-                System.out.println("用户不存在");
-                return ResponseEntity.badRequest().body("用户不存在");
-            }
-        }
-    }
-
-    // 用户注册-User-通过参数-idName-idPW
-    @RequestMapping(value="/register", method = RequestMethod.POST)
-    public ResponseEntity<?> register(String idName, String idPW) {
-        List<User> find_registerUser = mongoTemplate.find(Query.query(Criteria.where("idName")), User.class);
-        System.out.println("find_registerUser = " + find_registerUser);
-        if (find_registerUser != null) {
-            return ResponseEntity.badRequest().body("用户名已存在");
-        } else {
-            User user = new User(idName, idPW);
-            System.out.println("idName = " + idName);
-            System.out.println("idPW = " + idPW);
-            User insertUser = mongoTemplate.insert(user);
-            return ResponseEntity.ok("用户:"+idName +"注册成功！登录密码为:" + idPW);
-        }
-    }
-
-
-    // 增加数据
-    @RequestMapping(value="/insertUser", method = RequestMethod.POST)
-    public ResponseEntity<?> insertUser(User person) {
-        User insert = mongoTemplate.insert(person);
-        return ResponseEntity.ok("添加成功,添加后的用户id为：" + insert.getId());
-    }
-
-    // 删除数据
-    @RequestMapping(value="/deleteUserById/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> deleteUserById(@PathVariable("id") String id) {
-        User findAndRemove = mongoTemplate.findAndRemove(Query.query(Criteria.where("id").is(id)), User.class);
-        return ResponseEntity.ok("删除成功,删除的数据为：" + findAndRemove);
-    }
-
-    // 修改数据
-    @RequestMapping(value = "updateUserByName", method = RequestMethod.POST)
-    public ResponseEntity<?> updateUserByName(String name, Integer age) {
-        UpdateResult updateResult = mongoTemplate.updateFirst(Query.query(Criteria.where("name").is(name)),
-                Update.update("age", age), User.class);
-        long modifiedCount = updateResult.getModifiedCount();
-        /* mongoTemplate.updateMulti(query, update, entityClass) */
-        return ResponseEntity.ok("修改成功,修改数量：" + modifiedCount);
-    }
-
-    // 分页查询
-    @RequestMapping(value="/findUserPage", method = RequestMethod.GET)
-    public Object findUserPage(Integer currentPageNo, Integer pageSize) {
-        Query limit = new Query().skip((currentPageNo - 1) * pageSize).limit(pageSize);
-        List<User> findUser = mongoTemplate.find(limit, User.class);
-        return findUser;
-    }
-
-    // 查询所有的数据
-    @RequestMapping(value="/findAllUser", method = RequestMethod.GET)
-    public Object findAllUser() {
-        List<User> findUser = mongoTemplate.findAll(User.class);
-        return findUser;
-    }
-
-}
-```
-
-## 创建：JWT配置类-JWTConfig
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-public class JWTConfig
-{
-    String secret;
-    String iss;
-    String subject;
-    String user0;
-    String pw0;
-
-    @Override
-    public String toString()
-    {
-        final StringBuilder sb = new StringBuilder("JWTConfig{");
-        sb.append("secret='").append(secret).append('\'');
-        sb.append(", iss=").append(iss);
-        sb.append(", subject=").append(subject);
-        sb.append(", user0=").append(user0);
-        sb.append(", pw0=").append(pw0);
-        sb.append('}');
-        return sb.toString();
-    }
-}
-```
-
-## 创建：JWT集成工具类-JWTUtil
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-import com.google.gson.Gson;
-import io.jsonwebtoken.*;
-import lombok.Data;
-import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.util.Date;
-import java.util.UUID;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
-
-import java.time.Instant;
-
-@Data
-public class JWTUtil {
-    // 获取JWT配置-对象-GSON
-    private static String jsonFile = "jwt-authorization.json";
-    static JsonUtil jsonUtil = new JsonUtil();
-    static String jsonStr;
-
-    static {
-        try {
-            jsonStr = jsonUtil.readJSON(jsonFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static Gson gson = new Gson();
-    static JWTConfig jwtConfig = gson.fromJson(jsonStr, JWTConfig.class);
-
-    // 设置token访问的过期时间-单位/分种
-    private static final int DAY = 60*60*24;
-    public static final int ACCESS_EXPIRE = 30 * DAY;
-
-    // 设置秘钥的加密算法
-    private final static SecureDigestAlgorithm<SecretKey, SecretKey> ALGORITHM = Jwts.SIG.HS512;
-    // 生成私钥，只能在服务器端保存
-    // 使用Jwts.SIG.HS256 算法需要SECRET至少32位
-    // 使用Jwts.SIG.HS512 算法需要SECRET至少64位
-
-    // 设置密钥字符串
-    private final static String SECRET = jwtConfig.secret;
-    // 使用加密算法加密密钥字符串
-    public final static SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
-
-    // 设置jwt签发者
-    private final static String JWT_ISS = jwtConfig.iss;
-
-    // 设置jwt主题
-    private final static String SUBJECT = jwtConfig.subject;
-
-    public JWTUtil() throws IOException {
-    }
-
-    /* 常用声明：
-    iss: jwt签发者-签发方
-    sub: jwt主题-面向用户
-    aud: jwt接受者-接受方
-    exp: jwt过期时间-过期时间必须要大于签发时间
-    nbf: jwt开始启用时间-定义在什么时间之前-jwt不可用的
-    iat: jwt签发时间-过期时间必须要大于签发时间
-    jti: jwt唯一身份标识-主要用来作为一次性token-回避重放攻击
-     */
-    public String genJWTToken(String inputStr)  {
-
-        // 生成令牌id-UUID.randomUUID()-随机
-        String uuid = UUID.randomUUID().toString();
-        Date exprireDate = Date.from(Instant.now().plusSeconds(ACCESS_EXPIRE));
-
-        return Jwts.builder()
-                // 设置头部信息-header
-                .header()
-                .add("type", "JWT")
-                .add("algo", "HS512")
-                .and()
-                // 设置负载信息-payload
-                .claim("payload", inputStr+"==="+SECRET)
-                // 设置令牌ID
-                .id(uuid)
-                // 设置过期日期
-                .expiration(exprireDate)
-                // 设置签发时间
-                .issuedAt(new Date())
-                // 设置主题
-                .subject(SUBJECT)
-                // 设置签发者
-                .issuer(JWT_ISS)
-                // 设置签名
-                .signWith(KEY, ALGORITHM)
-                .compact();
-    }
-
-    // 解析token-claim
-    public static Jws<Claims> parseJWTToken(String token) {
-        return Jwts.parser()
-                .verifyWith(KEY)  // 必须持有相同的KEY才能解析
-                .build()
-                .parseSignedClaims(token);
-    }
-
-    // 解析头部-Header
-    public  JwsHeader parseHeader(String token) {
-        return parseJWTToken(token).getHeader();
-    }
-
-    // 解析负载-Payload
-    public  Claims parsePayload(String token) {
-        return parseJWTToken(token).getPayload();
-    }
-
-//    // 解析签名-Signature
-//    public  String parseSignature(String token) {
-//        return parseJWTToken(token).getSignature();
-//    }
-
-}
-```
-
-## 创建：Json集成工具类-JsonUtil
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-import com.alibaba.fastjson2.JSON;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.io.*;
-
-public class JsonUtil {
-
-    public String readJSON(String jsonFile) throws IOException {
-//        File file0 = new File("");
-//        String filePath = file0.getCanonicalPath();
-//        System.out.println("filePath = " + filePath);
-
-//        String oriPath = this.getClass().getResource("").getPath();
-//        System.out.println("oriPath = " + oriPath);
-
-        File file01 = new File("");
-        String filePath01 = file01.getAbsolutePath();
-//        System.out.println("filePath01 = " + filePath01);
-
-        String dirPath = filePath01 + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + jsonFile;
-//        System.out.println("dirPath = " + dirPath);
-
-        File file = new File(dirPath);
-        System.out.println("file = " + file);
-        FileReader fileReader = new FileReader(file);
-
-        Reader reader = new InputStreamReader(new FileInputStream(file), "Utf-8");
-        int ch = 0;
-        StringBuffer sb = new StringBuffer();
-        while ((ch = reader.read()) != -1) {
-            sb.append((char) ch);
-        }
-        fileReader.close();
-        reader.close();
-        String jsonStr = sb.toString();
-//        System.out.println("jsonStr = " + jsonStr);
-//        System.out.println("JSON.parseObject(jsonStr) = " + JSON.parseObject(jsonStr));
-        return jsonStr;
-    }
-}
-```
-
-## 创建：主程序-测试类-S11MongotemplateJwtJsonLoginApplication
-
-```java
-package com.jinwei.S11_mongotemplate_JWT_JSON_Login;
-
-import com.google.gson.Gson;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-
-import java.io.IOException;
-
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class S11MongotemplateJwtJsonLoginApplication {
-
-	public static void main(String[] args) throws IOException {
-		SpringApplication.run(S11MongotemplateJwtJsonLoginApplication.class, args);
-
-//		User user = new User("user2", "123");
-//		String subject = new Gson().toJson(user);
-////
-//		JWTUtil jwtUtil = new JWTUtil();
-////		String jwtoken = jwtUtil.genJWTToken(subject);
-//
-//		String jwtoken = "eyJ0eXBlIjoiSldUIiwiYWxnbyI6IkhTNTEyIiwiYWxnIjoiSFM1MTIifQ.eyJwYXlsb2FkIjoie309PT0xMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MCIsImp0aSI6ImE0MThhNzY1LWU2ZDktNDBiNC05MTFjLTAwOTU5NjVkZDI1YyIsImV4cCI6MTcyNDk1MDk3OSwiaWF0IjoxNzI0MDg2OTc5LCJzdWIiOiJTVUJKRUNUX3podXRpIiwiaXNzIjoiSVNTX3FpYW5mYWZhbmcifQ.4BOMKBjL4FEH3alLLHi1mFM5WReED7_Ip1oW9OkobDaezwWoXLwA2xd8jzUw-zA85WNRBvbBcfWCSaDvdM_86Q";
-//
-//		System.out.println("jwtoken = " + jwtoken);
-//		System.out.println("jwtUtil.parseJWTToken(jwtoken) = " + jwtUtil.parseJWTToken(jwtoken));
-//		System.out.println("jwtUtil.parseHeader(jwtoken) = " + jwtUtil.parseHeader(jwtoken));
-//		System.out.println("jwtUtil.parsePayload(jwtoken) = " + jwtUtil.parsePayload(jwtoken));
-
-
-	}
-
+      )
+  }
 }
 ```
 
 
----
 
-## 测试结果
 
-![alt text](image-104.png)
 
-![alt text](image-105.png)
 
-![alt text](image-106.png)
-
-![alt text](image-107.png)
 
 
