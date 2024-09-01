@@ -6,8 +6,7 @@ lin-jinwei
 
 ---
 
-Code: [../code/S12-vue-admin-CA](../code/S12-vue-admin-CA/)
-
+Code: [../code/S12-springboot-web-jpa-mongodb-CA](../code/S12-springboot-web-jpa-mongodb-CA/)
 
 ---
 
@@ -15,8 +14,6 @@ Code: [../code/S12-vue-admin-CA](../code/S12-vue-admin-CA/)
 ### https://start.spring.io/
 
 ![alt text](image-108.png)
-
-![alt text](image-109.png)
 
 ## 
 
